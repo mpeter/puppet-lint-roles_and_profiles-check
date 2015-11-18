@@ -8,7 +8,7 @@ PuppetLint.new_check(:node_definition) do
     node_indexes.each do |node|
       role_already_declared = false
       resource_indexes.select { |r| r[:start] > node[:start] and r[:end] < node[:end] }.each do |resource|
-        if resource[:type].type != :CLASS or !resource[:type].next_code_token.next_code_token.value.start_with?('roles') or role_already_declared == true
+        if resource[:type].type != :CLASS or !resource[:type].next_code_token.next_code_token.value.start_with?('role') or role_already_declared == true
           notify :warning, {
             :message => 'expected only one role declaration',
             :line    => resource[:type].line,
@@ -24,7 +24,7 @@ end
 
 PuppetLint.new_check(:roles_class_params) do
   def check
-    class_indexes.select {|c| c[:name_token].value.start_with?('roles')}.each do |klass|
+    class_indexes.select {|c| c[:name_token].value.start_with?('role')}.each do |klass|
       unless klass[:param_tokens].nil?
         klass[:param_tokens].select {|t|t.type == :VARIABLE }.each do |token|
           notify :warning, {
